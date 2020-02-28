@@ -1,0 +1,15 @@
+{
+  "name": "challengenodejs",
+  "version": "1.0.0",
+  "description": "challenge api rest nodejs",
+  "main": "index.js",
+  "repository": "https://github.com/moiseR29/challengenodejs.git",
+  "author": "Moise <moiserebatta@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
