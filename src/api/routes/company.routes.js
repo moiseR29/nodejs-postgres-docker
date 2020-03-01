@@ -7,6 +7,7 @@ module.exports = function({ CompanyController }) {
   router.get('/:id', CompanyController.getCompany.bind(CompanyController));
   router.post('/', CompanyController.createCompany.bind(CompanyController));
   router.put('/:id', CompanyController.updateCompany.bind(CompanyController));
+  router.patch('/:id', CompanyController.updateCompany.bind(CompanyController));
   router.delete(
     '/:id',
     CompanyController.deleteCompany.bind(CompanyController)
