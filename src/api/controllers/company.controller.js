@@ -1,4 +1,6 @@
 const HttpStatus = require('http-status-codes');
+const { DataRequired, NotFoundError } = require('../../exceptions');
+const { ValidationError } = require('sequelize');
 
 class CompanyController {
   constructor({ CompanyService }) {
@@ -8,17 +10,20 @@ class CompanyController {
   async getCompanies(req, res) {
     try {
       let companies = await this._companyService.getAll();
-      if (!companies) {
-        return res.status(HttpStatus.NOT_FOUND).send({
-          error: 'Not Found'
-        });
-      }
 
       return res.send({
         payload: companies
       });
     } catch (err) {
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({});
+      if (err instanceof NotFoundError) {
+        return res.status(HttpStatus.NOT_FOUND).send({
+          error: err
+        });
+      } else {
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+          error: err
+        });
+      }
     }
   }
 
@@ -31,17 +36,22 @@ class CompanyController {
     }
     try {
       let company = await this._companyService.get(id);
-      if (!company) {
-        return res.status(HttpStatus.NOT_FOUND).send({
-          error: 'Not Found'
-        });
-      }
 
       return res.send({
         payload: company
       });
     } catch (err) {
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({});
+      if (err instanceof NotFoundError) {
+        return res.status(HttpStatus.NOT_FOUND).send({
+          error: {
+            message: 'name and legalname and email and address cannot be null'
+          }
+        });
+      } else {
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+          error: err
+        });
+      }
     }
   }
 
@@ -59,7 +69,19 @@ class CompanyController {
         .status(HttpStatus.CREATED)
         .send({ message: 'Company created' });
     } catch (err) {
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({});
+      if (err instanceof DataRequired) {
+        return res.status(HttpStatus.BAD_REQUEST).send({
+          error: err
+        });
+      } else if (err instanceof ValidationError) {
+        return res.status(HttpStatus.BAD_REQUEST).send({
+          error: err.message
+        });
+      } else {
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+          error: err
+        });
+      }
     }
   }
 
@@ -77,7 +99,15 @@ class CompanyController {
       await this._companyService.update(id, body);
       return res.send({ message: 'company updated' });
     } catch (err) {
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({});
+      if (err instanceof NotFoundError) {
+        return res.status(HttpStatus.NOT_FOUND).send({
+          error: err
+        });
+      } else {
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+          error: err
+        });
+      }
     }
   }
 
@@ -89,8 +119,20 @@ class CompanyController {
       });
     }
 
-    await this._companyService.delete(id);
-    return res.send({ message: 'company deleted' });
+    try {
+      await this._companyService.delete(id);
+      return res.send({ message: 'company deleted' });
+    } catch (err) {
+      if (err instanceof NotFoundError) {
+        return res.status(HttpStatus.NOT_FOUND).send({
+          error: err
+        });
+      } else {
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+          error: err
+        });
+      }
+    }
   }
 }
 

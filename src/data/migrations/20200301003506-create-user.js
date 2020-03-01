@@ -1,4 +1,3 @@
-'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('Users', {
@@ -14,22 +13,45 @@ module.exports = {
         reference: {
           model: 'Companies',
           key: 'id'
-        }
+        },
+        allowNull: false
       },
-      full_name: {
-        type: Sequelize.STRING
+      fullName: {
+        type: Sequelize.STRING,
+        defaultValue: false,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Please enter your fullName'
+          }
+        }
       },
       phone: {
         type: Sequelize.STRING
       },
       age: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'please enter your age'
+          }
+        }
       },
       email: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: false,
+        validate: {
+          isEmail: true
+        }
       },
       position: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          msg: 'please enter your position'
+        }
       },
       address: {
         type: Sequelize.STRING

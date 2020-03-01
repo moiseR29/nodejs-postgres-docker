@@ -7,6 +7,7 @@ module.exports = function({ UserController }) {
   router.get('/:id', UserController.getUser.bind(UserController));
   router.post('/', UserController.createUser.bind(UserController));
   router.put('/:id', UserController.updateUser.bind(UserController));
+  router.patch('/:id', UserController.updateUser.bind(UserController));
   router.delete('/:id', UserController.deleteUser.bind(UserController));
 
   return router;

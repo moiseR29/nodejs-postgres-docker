@@ -1,4 +1,6 @@
 const HttpStatus = require('http-status-codes');
+const { DataRequired, NotFoundError } = require('../../exceptions');
+const { ValidationError } = require('sequelize');
 
 class UserController {
   constructor({ UserService }) {
@@ -8,19 +10,20 @@ class UserController {
   async getUsers(req, res) {
     try {
       let users = await this._userService.getAll();
-      if (!users) {
-        return res.status(HttpStatus.NOT_FOUND).send({
-          error: 'Not Found'
-        });
-      }
 
       return res.send({
         payload: users
       });
     } catch (err) {
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
-        error: error
-      });
+      if (err instanceof NotFoundError) {
+        return res.status(HttpStatus.NOT_FOUND).send({
+          error: err
+        });
+      } else {
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+          error: err
+        });
+      }
     }
   }
 
@@ -33,17 +36,20 @@ class UserController {
     }
     try {
       let user = await this._userService.get(id);
-      if (!user) {
-        return res.status(HttpStatus.NOT_FOUND).send({
-          error: 'Not Found'
-        });
-      }
 
       return res.send({
         payload: user
       });
     } catch (err) {
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({});
+      if (err instanceof NotFoundError) {
+        return res.status(HttpStatus.NOT_FOUND).send({
+          error: err
+        });
+      } else {
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+          error: err
+        });
+      }
     }
   }
 
@@ -54,12 +60,28 @@ class UserController {
         .status(HttpStatus.PAYMENT_REQUIRED)
         .send({ message: 'body required' });
     }
+
     try {
       let createdUser = await this._userService.create(body);
 
       return res.status(HttpStatus.CREATED).send({ message: 'User created' });
     } catch (err) {
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({});
+      if (err instanceof DataRequired) {
+        return res.status(HttpStatus.BAD_REQUEST).send({
+          error: err
+        });
+      } else if (err instanceof ValidationError) {
+        return res.status(HttpStatus.BAD_REQUEST).send({
+          error: {
+            message:
+              'companyId and fullname and age and email and position cannot be null'
+          }
+        });
+      } else {
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+          error: err
+        });
+      }
     }
   }
 
@@ -77,7 +99,15 @@ class UserController {
       await this._userService.update(id, body);
       return res.send({ message: 'user updated' });
     } catch (err) {
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({});
+      if (err instanceof NotFoundError) {
+        return res.status(HttpStatus.NOT_FOUND).send({
+          error: err
+        });
+      } else {
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+          error: err
+        });
+      }
     }
   }
 
@@ -89,9 +119,22 @@ class UserController {
       });
     }
 
-    await this._userService.delete(id);
-    return res.send({ message: 'user deleted' });
+    try {
+      await this._userService.delete(id);
+      return res.send({ message: 'user deleted' });
+    } catch (err) {
+      if (err instanceof NotFoundError) {
+        return res.status(HttpStatus.NOT_FOUND).send({
+          error: err
+        });
+      } else {
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+          error: err
+        });
+      }
+    }
   }
 }
 
 module.exports = UserController;
+// SequelizeDatabaseError
