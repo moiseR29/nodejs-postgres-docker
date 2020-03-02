@@ -47,6 +47,26 @@ class CompanyController {
     }
   }
 
+  async getSortCreateAtCompanies(req, res) {
+    try {
+      let companies = await this._companyService.getAllCompanySortCreateDate();
+
+      return res.send({
+        payload: companies
+      });
+    } catch (err) {
+      if (err instanceof NotFoundError) {
+        return res.status(HttpStatus.NOT_FOUND).send({
+          error: err.message
+        });
+      } else {
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+          error: err.message
+        });
+      }
+    }
+  }
+
   async getCompany(req, res) {
     const { id } = req.params;
     if (!id) {
