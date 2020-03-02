@@ -18,9 +18,14 @@ const { CompanyService, UserService } = require('../services');
 const Routes = require('../api/routes');
 const UserRoutes = require('../api/routes/user.routes');
 const CompanyRoutes = require('../api/routes/company.routes');
+const LoginRoutes = require('../api/routes/login.routes');
 
 // controllers
-const { CompanyController, UserController } = require('../api/controllers');
+const {
+  CompanyController,
+  UserController,
+  LoginController
+} = require('../api/controllers');
 
 const container = createContainer();
 
@@ -46,11 +51,13 @@ container
   })
   .register({
     UserRoutes: asClass(UserRoutes).singleton(),
-    CompanyRoutes: asClass(CompanyRoutes).singleton()
+    CompanyRoutes: asClass(CompanyRoutes).singleton(),
+    LoginRoutes: asClass(LoginRoutes).singleton()
   })
   .register({
     UserController: asClass(UserController).singleton(),
-    CompanyController: asClass(CompanyController).singleton()
+    CompanyController: asClass(CompanyController).singleton(),
+    LoginController: asClass(LoginController).singleton()
   });
 
 module.exports = container;

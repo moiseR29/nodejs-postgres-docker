@@ -9,7 +9,7 @@ class Repository {
   }
 
   getAllDateSort() {
-    return this._db[this._entity].findAll({ order: [['updatedAt', 'ASC']] });
+    return this._db[this._entity].findAll({ order: [['createdAt', 'ASC']] });
   }
 
   get(id) {
