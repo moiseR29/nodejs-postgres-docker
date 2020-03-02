@@ -8,6 +8,10 @@ module.exports = function({ CompanyController }) {
     '/sortname',
     CompanyController.getSortNameCompanies.bind(CompanyController)
   );
+  router.get(
+    '/sortcreateat',
+    CompanyController.getSortCreateAtCompanies.bind(CompanyController)
+  );
   router.get('/:id', CompanyController.getCompany.bind(CompanyController));
   router.post('/', CompanyController.createCompany.bind(CompanyController));
   router.put('/:id', CompanyController.updateCompany.bind(CompanyController));

@@ -8,6 +8,10 @@ class Repository {
     return this._db[this._entity].findAll();
   }
 
+  getAllDateSort() {
+    return this._db[this._entity].findAll({ order: [['updatedAt', 'ASC']] });
+  }
+
   get(id) {
     return this._db[this._entity].findOne({ where: { id } });
   }
