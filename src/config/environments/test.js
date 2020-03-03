@@ -1,5 +1,5 @@
 module.exports = {
-  PORT: process.env.PORTQA,
+  PORT: 6000,
   DB: {
     username: 'postgres',
     password: 'password',

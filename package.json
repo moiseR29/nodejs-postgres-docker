@@ -4,8 +4,9 @@
   "description": "challenge api rest nodejs",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "NODE_ENV=production node index.js",
     "dev": "nodemon index.js",
+    "qa": "NODE_ENV=qa nodemon index.js",
     "test": "mocha src/test/*.js"
   },
   "repository": "https://github.com/moiseR29/challengenodejs.git",
