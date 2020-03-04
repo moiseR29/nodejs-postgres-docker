@@ -12,11 +12,16 @@ class Test {
     let token;
     describe('api integration', () => {
       before(async () => {
-        await db.sequelize.sync({
+        /*await db.sequelize.sync({
           force: true,
           match: /_test$/,
           logging: false
-        });
+        }); */
+        await db.sequelize.sync();
+      });
+
+      after(async () => {
+        await db.sequelize.drop();
       });
 
       //login
@@ -135,26 +140,6 @@ class Test {
         it('users list', done => {
           request(app)
             .get('/api/user')
-            .set('Authorization', 'Bearer ' + token)
-            .end((err, res) => {
-              expect(res.statusCode).to.equal(200);
-              done();
-            });
-        });
-
-        it('users sortname', done => {
-          request(app)
-            .get('/api/user/sortname')
-            .set('Authorization', 'Bearer ' + token)
-            .end((err, res) => {
-              expect(res.statusCode).to.equal(200);
-              done();
-            });
-        });
-
-        it('users sortCreate', done => {
-          request(app)
-            .get('/api/user/sortcreateat')
             .set('Authorization', 'Bearer ' + token)
             .end((err, res) => {
               expect(res.statusCode).to.equal(200);

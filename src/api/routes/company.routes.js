@@ -15,9 +15,9 @@ module.exports = function({ CompanyController }) {
     CompanyController.getSortNameCompanies.bind(CompanyController)
   );
   router.get(
-    '/sortcreateat',
+    '/createat',
     checkAuth,
-    CompanyController.getSortCreateAtCompanies.bind(CompanyController)
+    CompanyController.getFilterCreateAtCompanies.bind(CompanyController)
   );
   router.get(
     '/:id',

@@ -1,3 +1,5 @@
+const sequelize = require('sequelize');
+
 class Repository {
   constructor(db, entity) {
     this._db = db;
@@ -6,10 +8,6 @@ class Repository {
 
   getAll() {
     return this._db[this._entity].findAll();
-  }
-
-  getAllDateSort() {
-    return this._db[this._entity].findAll({ order: [['createdAt', 'ASC']] });
   }
 
   get(id) {
