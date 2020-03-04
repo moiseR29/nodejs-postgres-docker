@@ -1,4 +1,4 @@
-const container = require('./src/api/container');
+const container = require('./api/container');
 
 const application = container.resolve('app');
 const db = container.resolve('db');
