@@ -1,5 +1,6 @@
 const Service = require('./services');
 const { NotFoundError } = require('../exceptions');
+const dateFormat = require('dateformat');
 
 class CompanyService extends Service {
   constructor({ CompanyRepository }) {
@@ -16,10 +17,20 @@ class CompanyService extends Service {
     return sortCompanies;
   }
 
-  async getAllCompanySortCreateDate() {
-    const companies = await this._companyRepository.getAllDateSort();
+  async getAllCompanyFilterCreateDate(date) {
+    const companies = await this.getAll();
     if (!companies) throw new NotFoundError('not found');
-    return companies;
+
+    const companiesFilter = companies.filter(
+      item => this.format(item.createAt) === date
+    );
+
+    if (companiesFilter.length < 1) throw new NotFoundError('not found');
+    return companiesFilter;
+  }
+
+  format(date) {
+    return dateFormat(date, 'isoDate');
   }
 }
 

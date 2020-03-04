@@ -47,9 +47,13 @@ class CompanyController {
     }
   }
 
-  async getSortCreateAtCompanies(req, res) {
+  async getFilterCreateAtCompanies(req, res) {
+    const { body } = req;
     try {
-      let companies = await this._companyService.getAllCompanySortCreateDate();
+      const date = body.date;
+      let companies = await this._companyService.getAllCompanyFilterCreateDate(
+        date
+      );
 
       return res.send({
         payload: companies
