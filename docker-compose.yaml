@@ -1,5 +1,14 @@
 version: '3'
 services:
+  postgres:
+    image: postgres:10.4
+    ports:
+      - '35432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: challenge
+
   app:
     build: .
     depends_on:
@@ -14,16 +23,6 @@ services:
       PORT: 3000
     ports:
       - '3000:3000'
-    command: npm start
     volumes:
       - .:/app/
       - /app/node_modules
-
-  postgres:
-    image: postgres:10.4
-    ports:
-      - '35432:5432'
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: challenge
